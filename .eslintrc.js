@@ -1,8 +1,15 @@
 module.exports = {
-   extends: ["airbnb-base", "prettier"],
-   // Optionally add your project-specific rules or settings here:
-   rules: {
-     // Example: Allow console statements:
-     "no-console": "off",
-   },
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+  },
+  extends: ['airbnb-base', 'prettier'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  rules: {
+    'no-console': 'off',
+  },
 };
