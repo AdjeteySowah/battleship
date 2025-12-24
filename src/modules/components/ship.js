@@ -1,6 +1,6 @@
 import { shipTypes } from "../utils/constants.js";
 
-function createShip(shipType) {
+export function createShip(shipType) {
   const length = getLength(shipType);
   function getLength(shipType) {
     for (let i = 0; i < shipTypes.length; i++) {
@@ -10,12 +10,18 @@ function createShip(shipType) {
     }
   }
 
-  const hitTimes = 'l';
+  let hitTimes = 0;
   function hit() {
+    hitTimes+= 1;
+  }
 
+  function isSunk() {
+    return length === hitTimes ? true : false;
   }
 
   return {
     length,
+    hit,
+    isSunk,
   }
 }
