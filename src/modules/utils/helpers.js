@@ -1,11 +1,19 @@
 import { shipTypes } from "./constants.js";
+import { defaultAxis } from "../components/gameboard.js";
 
-let current = 0;
-export function setCurrentShipLength() {
-  let shipLength = shipTypes[current].length;
-  current++;
-  if (current === 5) current = 0;
-  return shipLength;
+export function setCurrentAxis() {
+  if (defaultAxis === 'x') {
+    defaultAxis = 'y';
+  } else if (defaultAxis === 'y') {
+    defaultAxis = 'x';
+  }
+}
+
+let itemNum = 0;
+export function setCurrentShipName() {
+  let s = shipTypes[itemNum].name;
+  itemNum+= 1;
+  return s;
 }
 
 export function isValidPlacement(x, y, shipLength, axis) {
