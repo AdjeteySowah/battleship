@@ -23,5 +23,5 @@ export function createShip(shipType) {
     length,
     hit,
     isSunk,
-  }
+  };
 }
