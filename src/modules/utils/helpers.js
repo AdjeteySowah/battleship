@@ -1,13 +1,4 @@
 import { shipTypes } from "./constants.js";
-import { defaultAxis } from "../components/gameboard.js";
-
-export function setCurrentAxis() {
-  if (defaultAxis === 'x') {
-    defaultAxis = 'y';
-  } else if (defaultAxis === 'y') {
-    defaultAxis = 'x';
-  }
-}
 
 let itemNum = 0;
 export function setCurrentShipName() {
@@ -16,26 +7,44 @@ export function setCurrentShipName() {
   return s;
 }
 
-export function isValidPlacement(x, y, shipLength, axis) {
+export function isValidPlacement(x, y, length, axis, board, size) {
+  function collideX() {
+    for (let i = 0; i < length; i++) {
+      if (board[x][y + i] !== null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function collideY() {
+    for (let i = 0; i < length; i++) {
+      if (board[x + i][y] !== null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   if (axis === 'x') {
     if (
-      (shipLength === 5 && x <= 9 && y <= 5) ||
-      (shipLength === 4 && x <= 9 && y <= 6) ||
-      (shipLength === 3 && x <= 9 && y <= 7) ||
-      (shipLength === 2 && x <= 9 && y <= 8)
+      (length === 5 && x < size && y <= size - length) ||
+      (length === 4 && x < size && y <= size - length) ||
+      (length === 3 && x < size && y <= size - length) ||
+      (length === 2 && x < size && y <= size - length)
     ) {
-      return true;
+      return collideX() ? false : true;
     } else {
       return false;
     }
   } else if (axis === 'y') {
     if (
-      (shipLength === 5 && x <= 5 && y <= 9) ||
-      (shipLength === 4 && x <= 6 && y <= 9) ||
-      (shipLength === 3 && x <= 7 && y <= 9) ||
-      (shipLength === 2 && x <= 8 && y <= 9)
+      (length === 5 && x <= size - length && y < size) ||
+      (length === 4 && x <= size - length && y < size) ||
+      (length === 3 && x <= size - length && y < size) ||
+      (length === 2 && x <= size - length && y < size)
     ) {
-      return true;
+      return collideY() ? false : true;
     } else {
       return false;
     }
