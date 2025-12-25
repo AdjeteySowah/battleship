@@ -1,103 +1,79 @@
 import { setCurrentShipName, isValidPlacement } from "../utils/helpers.js";
 import { createShip } from "./ship.js";
 
-const gameboardOne = [
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null]
-];
-
-  // U = unknown, H = hit, M = miss
-const shotsInGameboardOne = [
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U']
-];
-
-const gameboardTwo = [
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null]
-];
-
-  // U = unknown, H = hit, M = miss
-const shotsInGameboardTwo = [
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'],
-  ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U']
-];
-
-export let defaultAxis = 'x';
-function placeShip(x, y, axis = defaultAxis) {
-  // const axis = defaultAxis;  // revisit this and determine if axis should be declared this way
-  const currentShipName = setCurrentShipName();
-  const shipType = createShip(currentShipName);
-  const valid = isValidPlacement(x, y, shipType.length, axis);
-  if (valid && axis === 'x') {
-      shipType.segment = {};
-    for (let i = 0; i < shipType.length; i++) {
-      gameboardOne[x][y] = shipType;
-      shipType.segment[`coord${i}`] = [x, y];
-      y+= 1;
+export function createGameboard({ size = 10, defaultAxis = 'x', totalShips = 5 } = {}) {
+  function makeGrid(fillValue) {
+    const grid = [];
+    for (let i = 0; i < size; i++) {
+      const row = [];
+      for (let j = 0; j < size; j++) {
+        row.push(fillValue);
+      }
+      grid.push(row);
     }
-  } else if (valid && axis === 'y') {
-      shipType.segment = {};
-    for (let i = 0; i < shipType.length; i++) {
-      gameboardOne[x][y] = shipType;
-      shipType.segment[`coord${i}`] = [x, y];
-      x+= 1;
-    }
-  } else {
-    // handle error. invalid coordinate
+    return grid;
   }
 
-  // a function should be called here to let the computer place his 1st ship too
-}
+  let board = makeGrid(null);   // holds ship objects or null
+  let shots = makeGrid('U');    // 'U' unknown, 'H' hit, 'M' miss
+  let sunkShips = 0;
+  let axis = defaultAxis;
 
-function receiveAttack(x, y) {
-  let playerHasAttacked = false;
-  if (shotsInGameboardTwo[x][y] === 'U') {
-    if (gameboardTwo[x][y] === null) {  // a miss
-      shotsInGameboardTwo[x][y] = 'M';
-    } else {  // a hit
-      shotsInGameboardTwo[x][y] = 'H';
-      gameboardTwo[x][y].hit();
-      if (gameboardTwo[x][y].isSunk()) {
-        // let UI react if true
+  function setAxis(a) { 
+    axis = a === 'y' ? 'y' : 'x'; 
+  }
+
+  function placeShip(x, y, useAxis = axis) {
+    const currentShipName = setCurrentShipName();
+    const shipType = createShip(currentShipName);
+    const length = shipType.length;
+
+    const valid = isValidPlacement(x, y, length, useAxis, board, size);
+    if (!valid) return false;
+
+    if (useAxis === 'x') {
+      for (let i = 0; i < length; i++) {
+        board[x][y + i] = shipType;
+      }
+    } else {
+      for (let i = 0; i < length; i++) {
+        board[x + i][y] = shipType;
       }
     }
-    playerHasAttacked = true;
+    return true;
   }
 
-  // a function should be called that will make gameboardOne receive attacks from the computer
-  // this function should check if playerHasAttacked === true before running
-  return playerHasAttacked;
+  function receiveAttack(x, y) {
+    if (shots[x][y] !== 'U') return false;
+
+    if (board[x][y] === null) {
+      shots[x][y] = 'M';
+    } else {
+      shots[x][y] = 'H';
+      board[x][y].hit();
+      if (board[x][y].isSunk()) {
+        sunkShips += 1;
+      }
+    }
+    return true;
+  }
+
+  function allSunk() {
+    return sunkShips >= totalShips;
+  }
+
+  function reset() {
+    board = makeGrid(null);
+    shots = makeGrid('U');
+    sunkShips = 0;
+    axis = defaultAxis;
+  }
+
+  return {
+    setAxis,
+    placeShip,
+    receiveAttack,
+    allSunk,
+    reset,
+  };
 }
