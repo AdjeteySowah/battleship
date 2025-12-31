@@ -1,12 +1,1786 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Document</title>
-</head>
-<body>
-   
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Battleship</title>
+  </head>
+  <body class="page page--start">
+    <header class="header" role="banner">
+      <div class="header__inner header__inner--center">
+        <img
+          src="./assets/images/battleship-logo.png"
+          alt="Battleship logo"
+          class="header__logo header__logo--big"
+          width="375"
+          height="75"
+        />
+        <button
+          class="header__audio"
+          aria-pressed="false"
+          aria-label="Toggle audio"
+        >
+          <img
+            src="./assets/images/music-on.svg"
+            alt="music-on icon"
+            width="28"
+            height="28"
+          />
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main">
+      <section class="start" aria-labelledby="start-heading">
+        <h1 id="start-heading" class="start__title">ENTER PLAYER NAME:</h1>
+
+        <form class="start__form" action="#" method="post" novalidate>
+          <label for="player-name" class="start__label vis-hidden"
+            >Player name</label
+          >
+          <input
+            id="player-name"
+            class="start__input"
+            name="playerName"
+            type="text"
+            placeholder="BATTLESHIP COMBATANT"
+            aria-label="Player name"
+          />
+          <button type="submit" class="start__button">START GAME</button>
+        </form>
+      </section>
+    </main>
+
+    <template id="page--placement">
+      <header class="header" role="banner">
+        <div class="header__inner header__inner--center">
+          <img
+            src="./assets/images/battleship-logo.png"
+            alt="Battleship logo"
+            class="header__logo"
+            width="300"
+            height="60"
+          />
+          <button
+            class="header__audio"
+            aria-pressed="false"
+            aria-label="Toggle audio"
+          >
+            <img
+              src="./assets/images/music-on.svg"
+              alt="music-on icon"
+              width="28"
+              height="28"
+            />
+          </button>
+        </div>
+      </header>
+
+      <!-- Mapping: placement instruction and axis button above a single board -->
+      <main class="main">
+        <section class="placement" aria-labelledby="placement-heading">
+          <h1 id="placement-heading" class="placement__title">
+            MANDEM, PLACE YOUR CARRIER:
+          </h1>
+          <div class="placement__controls">
+            <button
+              class="placement__axis"
+              aria-pressed="false"
+              aria-label="Toggle axis"
+            >
+              AXIS: X
+            </button>
+          </div>
+
+          <div
+            class="placement__board"
+            role="region"
+            aria-label="Placement board"
+          >
+            <div class="board__grid board__grid--placement" role="grid">
+              <!-- Render a 10x10 grid of buttons for placement -->
+              <!-- Row 1 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 2 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 3 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 4 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 5 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 6 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 7 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 8 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 9 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 10 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </template>
+
+    <template id="page--gameplay">
+      <header class="header" role="banner">
+        <div class="header__inner">
+          <img
+            src="./assets/images/battleship-logo.png"
+            alt="Battleship logo"
+            class="header__logo"
+            width="300"
+            height="60"
+          />
+          <button
+            class="header__audio"
+            aria-pressed="false"
+            aria-label="Toggle audio"
+          >
+            <img
+              src="./assets/images/music-on.svg"
+              alt=""
+              width="28"
+              height="28"
+            />
+          </button>
+        </div>
+      </header>
+
+      <!-- Mapping: status: large centered rounded message box below logo -->
+      <main class="main" id="main">
+        <section class="status" aria-live="polite">
+          <div class="status__box">
+            <h1 class="status__text">Awaiting orders, Admiral mandem</h1>
+          </div>
+        </section>
+
+        <!-- Mapping: boards: left (friendly) and right (enemy) grids with headings -->
+        <section class="boards" aria-label="Game boards">
+          <div class="board board--friendly" aria-labelledby="friendly-title">
+            <h2 id="friendly-title" class="board__title">FRIENDLY WATERS</h2>
+            <div class="board__grid" role="grid" aria-hidden="false">
+              <!-- Row 1 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="A10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 2 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 3 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 4 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 5 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 6 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 7 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 8 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 9 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 10 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="B10"
+                  role="gridcell"
+                ></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="board board--enemy" aria-labelledby="enemy-title">
+            <h2 id="enemy-title" class="board__title">ENEMY WATERS</h2>
+            <div class="board__grid" role="grid" aria-hidden="false">
+              <!-- Row 1 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 2 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 3 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 4 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 5 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 6 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 7 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 8 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 9 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+              <!-- Row 10 -->
+              <div class="board__row" role="row" aria-hidden="true">
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E1"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E2"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E3"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E4"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E5"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E6"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E7"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E8"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E9"
+                  role="gridcell"
+                ></button>
+                <button
+                  class="board__cell board__cell--unknown"
+                  aria-label="E10"
+                  role="gridcell"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </template>
+
+    <template id="page--end">
+      <header class="header" role="banner">
+        <div class="header__inner header__inner--center">
+          <img
+            src="./assets/images/battleship-logo.png"
+            alt="Battleship logo"
+            class="header__logo"
+            width="300"
+            height="60"
+          />
+          <button
+            class="header__audio"
+            aria-pressed="false"
+            aria-label="Toggle audio"
+          >
+            <img
+              src="./assets/images/music-on.svg"
+              alt=""
+              width="28"
+              height="28"
+            />
+          </button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="winner" role="region" aria-labelledby="winner-heading">
+          <h1 id="winner-heading" class="winner__title">THE WINNER IS:</h1>
+          <div class="winner__box" role="status" aria-live="polite">
+            <p class="winner__name">PLAYER NAME</p>
+          </div>
+          <div class="winner__actions">
+            <button class="winner__button" type="button">PLAY AGAIN</button>
+          </div>
+        </section>
+      </main>
+    </template>
+  </body>
 </html>
