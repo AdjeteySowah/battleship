@@ -1,0 +1,32 @@
+<header class="header" role="banner">
+  <div class="header__inner header__inner--center">
+    <img
+      src="../assets/images/battleship-logo.png"
+      alt="Battleship logo"
+      class="header__logo"
+      width="300"
+      height="60"
+    />
+    <button
+      class="header__audio"
+      aria-pressed="false"
+      aria-label="Toggle audio"
+    >
+      <img src="../assets/images/music-on.svg" alt="" width="28" height="28" />
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="winner" role="region" aria-labelledby="winner-heading">
+    <h1 id="winner-heading" class="winner__title">THE WINNER IS:</h1>
+    <div class="winner__box" role="status" aria-live="polite">
+      <p class="winner__name">PLAYER NAME</p>
+    </div>
+    <div class="winner__actions">
+      <button class="winner__button" type="button" data-nav="1">
+        PLAY AGAIN
+      </button>
+    </div>
+  </section>
+</main>

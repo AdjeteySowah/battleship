@@ -1,0 +1,46 @@
+<header class="header" role="banner">
+  <div class="header__inner header__inner--center">
+    <img
+      src="../assets/images/battleship-logo.png"
+      alt="Battleship logo"
+      class="header__logo header__logo--big"
+      width="375"
+      height="75"
+    />
+    <button
+      class="header__audio header__audio--on header__audio--start"
+      aria-pressed="false"
+      aria-label="Toggle audio"
+    >
+      <img
+        src="../assets/images/music-on.svg"
+        alt="music-on icon"
+        width="28"
+        height="28"
+      />
+    </button>
+  </div>
+</header>
+
+<main class="main" id="main">
+  <section class="start" aria-labelledby="start-heading">
+    <h1 id="start-heading" class="start__title">ENTER PLAYER NAME:</h1>
+
+    <form class="start__form" novalidate>
+      <label for="player-name" class="start__label vis-hidden"
+        >Player name</label
+      >
+      <input
+        id="player-name"
+        class="start__input"
+        name="playerName"
+        type="text"
+        maxlength="15"
+        placeholder="BATTLESHIP COMBATANT"
+        aria-label="Player name"
+      />
+      <div class="start__err-msg start__err-msg--invisible"></div>
+      <button type="button" class="start__button">START GAME</button>
+    </form>
+  </section>
+</main>
