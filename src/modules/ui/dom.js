@@ -31,3 +31,10 @@ export function displayInputErrMsg(body, input) {
   );
   input.value = '';
 }
+
+export function showCurrentAxis(btn) {
+  btn.textContent.trim() === 'AXIS: X'
+    ? (btn.textContent = 'AXIS: Y')
+    : (btn.textContent = 'AXIS: X');
+  return btn.textContent.at(-1).toLowerCase();
+}
