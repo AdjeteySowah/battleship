@@ -1,18 +1,21 @@
-import { shipTypes } from "./constants.js";
+import { shipTypes } from './constants.js';
 
 let itemNum = 0;
-export function setCurrentShipName() {
-  let s = shipTypes[itemNum].name;
-  itemNum+= 1;
-  return s;
+export function setCurrentShipDetails(getNext) {
+  let details = shipTypes[itemNum];
+  if (getNext === true) itemNum += 1;
+  return details;
 }
 
 export function isValidPlacement(x, y, length, axis, board, size) {
+  const cells = [];
+
   function collideX() {
     for (let i = 0; i < length; i++) {
       if (board[x][y + i] !== null) {
         return true;
       }
+      cells.push([x, y + i]);
     }
     return false;
   }
@@ -22,6 +25,7 @@ export function isValidPlacement(x, y, length, axis, board, size) {
       if (board[x + i][y] !== null) {
         return true;
       }
+      cells.push([x + i, y]);
     }
     return false;
   }
@@ -33,9 +37,11 @@ export function isValidPlacement(x, y, length, axis, board, size) {
       (length === 3 && x < size && y <= size - length) ||
       (length === 2 && x < size && y <= size - length)
     ) {
-      return collideX() ? false : true;
+      return collideX()
+        ? { valid: false, cells: null }
+        : { valid: true, cells: cells };
     } else {
-      return false;
+      return { valid: false, cells: null };
     }
   } else if (axis === 'y') {
     if (
@@ -44,9 +50,11 @@ export function isValidPlacement(x, y, length, axis, board, size) {
       (length === 3 && x <= size - length && y < size) ||
       (length === 2 && x <= size - length && y < size)
     ) {
-      return collideY() ? false : true;
+      return collideY()
+        ? { valid: false, cells: null }
+        : { valid: true, cells: cells };
     } else {
-      return false;
+      return { valid: false, cells: null };
     }
   }
 }
