@@ -1,7 +1,10 @@
-import { setCurrentShipName, isValidPlacement } from "../utils/helpers.js";
-import { createShip } from "./ship.js";
+import { createShip } from './ship.js';
 
-export function createGameboard({ size = 10, defaultAxis = 'x', totalShips = 5 } = {}) {
+export function createGameboard({
+  size = 10,
+  defaultAxis = 'x',
+  totalShips = 5,
+} = {}) {
   function makeGrid(fillValue) {
     const grid = [];
     for (let i = 0; i < size; i++) {
@@ -14,33 +17,28 @@ export function createGameboard({ size = 10, defaultAxis = 'x', totalShips = 5 }
     return grid;
   }
 
-  let board = makeGrid(null);   // holds ship objects or null
-  let shots = makeGrid('U');    // 'U' unknown, 'H' hit, 'M' miss
+  let board = makeGrid(null); // holds ship objects or null
+  let shots = makeGrid('U'); // 'U' unknown, 'H' hit, 'M' miss
   let sunkShips = 0;
   let axis = defaultAxis;
 
-  function setAxis(a) { 
-    axis = a === 'y' ? 'y' : 'x'; 
+  function setAxis(a) {
+    return a === 'y' ? 'y' : 'x';
   }
 
-  function placeShip(x, y, useAxis = axis) {
-    const currentShipName = setCurrentShipName();
-    const shipType = createShip(currentShipName);
-    const length = shipType.length;
-
-    const valid = isValidPlacement(x, y, length, useAxis, board, size);
-    if (!valid) return false;
+  function placeShip(x, y, shipName, useAxis = axis) {
+    const ship = createShip(shipName);
+    const length = ship.length;
 
     if (useAxis === 'x') {
       for (let i = 0; i < length; i++) {
-        board[x][y + i] = shipType;
+        board[x][y + i] = ship;
       }
     } else {
       for (let i = 0; i < length; i++) {
-        board[x + i][y] = shipType;
+        board[x + i][y] = ship;
       }
     }
-    return true;
   }
 
   function receiveAttack(x, y) {
@@ -70,6 +68,8 @@ export function createGameboard({ size = 10, defaultAxis = 'x', totalShips = 5 }
   }
 
   return {
+    axis,
+    board,
     setAxis,
     placeShip,
     receiveAttack,
