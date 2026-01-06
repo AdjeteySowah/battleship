@@ -1,31 +1,24 @@
-// import plyerName, computerName, isNameFromInput
-import { createGameboard } from "./gameboard.js";
-import { generateRandomCoordinate } from "./ai.js";
+import { createGameboard } from './gameboard.js';
+import { genRandomAttackCoord } from './ai.js';
 
-function createPlayer() {
-  const name = isNameFromInput ? playerName : computerName;
-
-  const isComputer = isNameFromInput ? false : true;
-
+export function createPlayer({ playerName, isComputer } = {}) {
   const gameboard = createGameboard();
 
-  function attack(opponent, x, y) {
+  function manualAttack(opponent, x, y) {
     opponent.receiveAttack(x, y);
   }
 
   function autoAttack(opponent) {
-    const x = generateRandomCoordinate()[0];
-    const y = generateRandomCoordinate()[1];
+    const coord = genRandomAttackCoord();
+    const x = coord[0];
+    const y = coord[1];
     opponent.receiveAttack(x, y);
   }
-  
-  isNameFromInput = false;
 
   return {
-    name,
+    playerName,
     isComputer,
     gameboard,
-    attack,
-    autoAttack,
+    attack: isComputer ? autoAttack : manualAttack,
   };
 }
