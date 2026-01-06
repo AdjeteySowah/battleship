@@ -1,9 +1,9 @@
 import { shipTypes } from './constants.js';
 
 let itemNum = 0;
-export function setCurrentShipDetails(getNext) {
-  let details = shipTypes[itemNum];
-  if (getNext === true) itemNum += 1;
+export function getCurrentShipDetails(getNext) {
+  if (getNext) itemNum += 1;
+  const details = shipTypes[itemNum];
   return details;
 }
 
