@@ -1,5 +1,10 @@
 import musicOnIcon from '../../assets/images/music-on.svg';
 import musicOffIcon from '../../assets/images/music-off.svg';
+import carrierSvg from '../../assets/images/carrier-img.svg';
+import battleshipSvg from '../../assets/images/battleship-img.svg';
+import cruiserSvg from '../../assets/images/cruiser-img.svg';
+import submarineSvg from '../../assets/images/submarine-img.svg';
+import destroyerSvg from '../../assets/images/destroyer-img.svg';
 
 export function toggleSoundIcon(e) {
   const btn = e.target.closest('.header__audio');
@@ -37,4 +42,63 @@ export function showCurrentAxis(btn) {
     ? (btn.textContent = 'AXIS: Y')
     : (btn.textContent = 'AXIS: X');
   return btn.textContent.at(-1).toLowerCase();
+}
+
+export function showPlacedShip(ship, e, axis) {
+  const wrapper = document.createElement('div');
+  const img = document.createElement('img');
+  img.style.height = '3rem';
+  img.style.display = 'block';
+
+  if (ship === 'carrier') {
+    wrapper.classList.add('ship-appe', 'l-5');
+    if (axis === 'y') wrapper.classList.add('axis-y');
+
+    img.src = carrierSvg;
+    img.alt = 'carrier ship';
+
+    wrapper.appendChild(img);
+    e.target.appendChild(wrapper);
+    if (axis === 'y') e.target.style.position = 'relative';
+  } else if (ship === 'battleship') {
+    wrapper.classList.add('ship-appe', 'l-4');
+    if (axis === 'y') wrapper.classList.add('axis-y');
+
+    img.src = battleshipSvg;
+    img.alt = 'battleship ship';
+
+    wrapper.appendChild(img);
+    e.target.appendChild(wrapper);
+    if (axis === 'y') e.target.style.position = 'relative';
+  } else if (ship === 'cruiser') {
+    wrapper.classList.add('ship-appe', 'l-3');
+    if (axis === 'y') wrapper.classList.add('axis-y');
+
+    img.src = cruiserSvg;
+    img.alt = 'cruiser ship';
+
+    wrapper.appendChild(img);
+    e.target.appendChild(wrapper);
+    if (axis === 'y') e.target.style.position = 'relative';
+  } else if (ship === 'submarine') {
+    wrapper.classList.add('ship-appe', 'l-3');
+    if (axis === 'y') wrapper.classList.add('axis-y');
+
+    img.src = submarineSvg;
+    img.alt = 'submarine ship';
+
+    wrapper.appendChild(img);
+    e.target.appendChild(wrapper);
+    if (axis === 'y') e.target.style.position = 'relative';
+  } else {
+    wrapper.classList.add('ship-appe', 'l-2');
+    if (axis === 'y') wrapper.classList.add('axis-y');
+
+    img.src = destroyerSvg;
+    img.alt = 'destroyer ship';
+
+    wrapper.appendChild(img);
+    e.target.appendChild(wrapper);
+    if (axis === 'y') e.target.style.position = 'relative';
+  }
 }
