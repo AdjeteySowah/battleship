@@ -47,7 +47,7 @@ button {
 :root {
   --bg1: #05060a;
   --bg2: #0f1620;
-  --panel: rgba(255, 255, 255, 0.06);
+  --panel: rgba(255, 255, 255, 0.05);
   --accent: #cfe6ff;
   --hit: #ff6b6b;
   --miss: #8fb3ff;
@@ -130,6 +130,7 @@ body {
 /* Main layout blocks */
 .main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   flex: 1;
@@ -255,29 +256,46 @@ body {
 }
 
 /* Status box */
+.status {
+  width: 100%;
+}
 .status__box {
   background: var(--panel);
+  border: 2px solid var(--accent);
   border-radius: 1rem;
   padding: 1rem;
   margin: 0 auto 1.25rem auto;
-  max-width: 70%;
+  max-width: 80%;
   text-align: center;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 .status__text {
   margin: 0;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 0.03em;
+  font-weight: 500;
+  font-size: 1.6rem;
+  letter-spacing: 0.125rem;
   color: var(--accent);
   font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.status__text.status__text-animate {
+  animation: growAndFadeIn 1s ease forwards;
+}
+@keyframes growAndFadeIn {
+  from {
+    transform: scale(0.4);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Boards container */
 .boards {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  flex-direction: column-reverse;
+  gap: 2rem;
   align-items: center;
 }
 
@@ -299,7 +317,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 0.6rem 0;
-  font-size: 1.1rem;
+  font-size: 1.8rem;
   color: var(--accent);
 }
 
@@ -333,17 +351,19 @@ body {
 }
 
 /* Cell state modifiers (visual only) */
-.board__cell--unknown {
-  background: transparent;
+.board__cell--known {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.board__cell--hit {
+/* .board__cell--hit {
   background: var(--hit);
   border-color: var(--hit);
-}
-.board__cell--miss {
+} */
+/* .board__cell--miss {
   background: transparent;
   border-color: var(--miss);
-}
+} */
 .board__cell--ship {
   background: rgba(143, 179, 255, 0.12);
 }
@@ -408,7 +428,7 @@ body {
   .boards {
     flex-direction: row;
     align-items: flex-start;
-    gap: 2rem;
+    gap: 10rem;
     justify-content: space-between;
   }
   .board {
@@ -416,8 +436,8 @@ body {
     width: 48%;
   }
   .status__box {
-    max-width: 90%;
-    padding: 1.25rem;
+    max-width: 60%;
+    padding: 1rem;
   }
   .header__inner {
     padding: 0 1rem;
