@@ -9,9 +9,14 @@ import {
   displayInputErrMsg,
   showCurrentAxis,
   showPlacedShip,
+  showAttackedCell,
 } from './dom.js';
 import { createPlayer } from '../components/player.js';
-import { getCurrentShipDetails, isValidPlacement } from '../utils/helpers.js';
+import {
+  getCurrentShipDetails,
+  isValidPlacement,
+  isValidAttack,
+} from '../utils/helpers.js';
 import { genRandomPlacementCoord } from '../components/ai.js';
 import { boardSize } from '../utils/constants.js';
 
@@ -141,12 +146,12 @@ function initStartPage(container, navigateTo) {
 }
 
 function initPlacementPage(container, navigateTo, opts = {}) {
+  const player1 = opts.player1;
+  const player2 = opts.player2;
   const titleName = container.querySelector('.placement__title-name');
   const titleShip = container.querySelector('.placement__title-ship');
   const axisBtn = container.querySelector('.placement__axis');
   const boardCells = container.querySelectorAll('.board__cell');
-  const player1 = opts.player1;
-  const player2 = opts.player2;
 
   titleName.textContent =
     player1.playerName || sessionStorage.getItem('playerName');
@@ -219,6 +224,8 @@ function initPlacementPage(container, navigateTo, opts = {}) {
       currentShipDetails.name,
       player1.gameboard.axis,
     );
+    e.target.style.backgroundColor = 'rgba(255, 107, 107, 0.6)';
+    e.target.disabled = true;
     player2.gameboard.placeShip(
       xP2,
       yP2,
@@ -252,6 +259,36 @@ function initPlacementPage(container, navigateTo, opts = {}) {
 }
 
 export function initBattlePage(container, navigateTo, opts = {}) {
-  const body = container.querySelector('.page');
-  console.log('Battle Started!');
+  const player1 = opts.player1;
+  const player2 = opts.player2;
+  const statusText = container.querySelector('.status__text');
+  const statusName = container.querySelector('.status__text--name');
+  const boardCells = container.querySelectorAll('.board__cell--enemy');
+
+  statusName.textContent =
+    player1.playerName.charAt(0).toUpperCase() +
+    player1.playerName.slice(1).toLowerCase();
+  // animate status text so that every appearing text appears from lower scale and opacity to an increasing one
+
+  function attack(e) {
+    const x = Number(e.target.getAttribute('aria-label').split('')[0]);
+    const y = Number(e.target.getAttribute('aria-label').split('')[1]);
+    const validAttack = isValidAttack(x, y, player2.gameboard.shots);
+
+    if (validAttack) {
+      const isAHit = player1.attack(player2, x, y).hit;
+      showAttackedCell(e, isAHit);
+      console.log(player2.gameboard.shots);
+    }
+  }
+
+  boardCells.forEach((cell) => {
+    cell.addEventListener('click', attack);
+  });
+
+  return function cleanup() {
+    boardCells.forEach((cell) => {
+      cell.removeEventListener('click', attack);
+    });
+  };
 }
