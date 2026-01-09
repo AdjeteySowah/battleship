@@ -46,14 +46,15 @@ export function createGameboard({
 
     if (board[x][y] === null) {
       shots[x][y] = 'M';
+      return { attacked: true, hit: false };
     } else {
       shots[x][y] = 'H';
       board[x][y].hit();
       if (board[x][y].isSunk()) {
         sunkShips += 1;
       }
+      return { attacked: true, hit: true };
     }
-    return true;
   }
 
   function allSunk() {
@@ -70,6 +71,7 @@ export function createGameboard({
   return {
     axis,
     board,
+    shots,
     setAxis,
     placeShip,
     receiveAttack,
