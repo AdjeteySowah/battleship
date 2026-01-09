@@ -102,3 +102,16 @@ export function showPlacedShip(ship, e, axis) {
     if (axis === 'y') e.target.style.position = 'relative';
   }
 }
+
+export function showAttackedCell(e, hit) {
+  if (!e.target.classList.contains('board__cell--unknown')) return;
+
+  const bullet = document.createElement('div');
+  bullet.style.cssText = 'width: 1.5rem; height: 1.5rem; border-radius: 50%;';
+  hit
+    ? (bullet.style.backgroundColor = 'rgb(255, 107, 107)')
+    : (bullet.style.backgroundColor = 'rgb(255, 255, 255)');
+
+  e.target.classList.replace('board__cell--unknown', 'board__cell--known');
+  e.target.appendChild(bullet);
+}
