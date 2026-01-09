@@ -58,3 +58,7 @@ export function isValidPlacement(x, y, length, axis, board, size) {
     }
   }
 }
+
+export function isValidAttack(x, y, shots) {
+  return shots[x][y] === 'U' ? true : false;
+}
