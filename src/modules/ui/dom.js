@@ -44,70 +44,56 @@ export function showCurrentAxis(btn) {
   return btn.textContent.at(-1).toLowerCase();
 }
 
-export function showPlacedShip(ship, e, axis) {
+export function showPlacedShip(
+  shipName,
+  targetCell,
+  axis,
+  length,
+  isEnemyGrid = false,
+) {
   const wrapper = document.createElement('div');
+  wrapper.classList.add('ship-appe', `l-${length}`);
+  if (axis === 'x') {
+    wrapper.classList.add('axis-x');
+  } else {
+    wrapper.classList.add('axis-y');
+  }
+  if (isEnemyGrid) wrapper.classList.add('ship-hidden');
+
   const img = document.createElement('img');
   img.style.height = '3rem';
   img.style.display = 'block';
+  img.alt = `${shipName} ship`;
+  img.classList.add('ship-svg');
 
-  if (ship === 'carrier') {
-    wrapper.classList.add('ship-appe', 'l-5');
-    if (axis === 'y') wrapper.classList.add('axis-y');
-
-    img.src = carrierSvg;
-    img.alt = 'carrier ship';
-
-    wrapper.appendChild(img);
-    e.target.appendChild(wrapper);
-    if (axis === 'y') e.target.style.position = 'relative';
-  } else if (ship === 'battleship') {
-    wrapper.classList.add('ship-appe', 'l-4');
-    if (axis === 'y') wrapper.classList.add('axis-y');
-
-    img.src = battleshipSvg;
-    img.alt = 'battleship ship';
-
-    wrapper.appendChild(img);
-    e.target.appendChild(wrapper);
-    if (axis === 'y') e.target.style.position = 'relative';
-  } else if (ship === 'cruiser') {
-    wrapper.classList.add('ship-appe', 'l-3');
-    if (axis === 'y') wrapper.classList.add('axis-y');
-
-    img.src = cruiserSvg;
-    img.alt = 'cruiser ship';
-
-    wrapper.appendChild(img);
-    e.target.appendChild(wrapper);
-    if (axis === 'y') e.target.style.position = 'relative';
-  } else if (ship === 'submarine') {
-    wrapper.classList.add('ship-appe', 'l-3');
-    if (axis === 'y') wrapper.classList.add('axis-y');
-
-    img.src = submarineSvg;
-    img.alt = 'submarine ship';
-
-    wrapper.appendChild(img);
-    e.target.appendChild(wrapper);
-    if (axis === 'y') e.target.style.position = 'relative';
-  } else {
-    wrapper.classList.add('ship-appe', 'l-2');
-    if (axis === 'y') wrapper.classList.add('axis-y');
-
-    img.src = destroyerSvg;
-    img.alt = 'destroyer ship';
-
-    wrapper.appendChild(img);
-    e.target.appendChild(wrapper);
-    if (axis === 'y') e.target.style.position = 'relative';
+  switch (shipName) {
+    case 'carrier':
+      img.src = carrierSvg;
+      break;
+    case 'battleship':
+      img.src = battleshipSvg;
+      break;
+    case 'cruiser':
+      img.src = cruiserSvg;
+      break;
+    case 'submarine':
+      img.src = submarineSvg;
+      break;
+    default:
+      img.src = destroyerSvg;
   }
+
+  wrapper.appendChild(img);
+  targetCell.style.position = 'relative';
+  targetCell.appendChild(wrapper);
 }
 
 export function showAttackedCell(e, hit) {
   if (!e.target.classList.contains('board__cell--unknown')) return;
 
   const bullet = document.createElement('div');
-  bullet.style.cssText = 'width: 1.5rem; height: 1.5rem; border-radius: 50%;';
+  bullet.style.cssText =
+    'width: 1.5rem; height: 1.5rem; border-radius: 50%; margin: 0 auto;';
   hit
     ? (bullet.style.backgroundColor = 'rgb(255, 107, 107)')
     : (bullet.style.backgroundColor = 'rgb(255, 255, 255)');
