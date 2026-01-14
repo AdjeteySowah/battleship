@@ -203,11 +203,14 @@ function initPlacementPage(container, navigateTo, opts = {}) {
   }
 
   let placementCounter = 0;
+  const arr1 = [];
+  const arr2 = [];
   function placeShip(e) {
     const currentShipDetails = getCurrentShipDetails(false);
     const nextShipDetails = getCurrentShipDetails(true);
-    const xP1 = Number(e.target.getAttribute('aria-label').split('')[0]);
-    const yP1 = Number(e.target.getAttribute('aria-label').split('')[1]);
+    const targetCell = e.target;
+    const xP1 = Number(targetCell.getAttribute('aria-label').split('')[0]);
+    const yP1 = Number(targetCell.getAttribute('aria-label').split('')[1]);
     const computerCoord = genRandomPlacementCoord(
       currentShipDetails.length,
       player1.gameboard.axis,
@@ -217,21 +220,42 @@ function initPlacementPage(container, navigateTo, opts = {}) {
     const xP2 = computerCoord[0];
     const yP2 = computerCoord[1];
 
-    showPlacedShip(currentShipDetails.name, e, player1.gameboard.axis);
+    showPlacedShip(
+      currentShipDetails.name,
+      targetCell,
+      player1.gameboard.axis,
+      currentShipDetails.length,
+    );
+
     player1.gameboard.placeShip(
       xP1,
       yP1,
       currentShipDetails.name,
       player1.gameboard.axis,
     );
-    e.target.style.backgroundColor = 'rgba(255, 107, 107, 0.6)';
-    e.target.disabled = true;
+    targetCell.style.backgroundColor = 'rgba(255, 107, 107, 0.6)';
+    targetCell.disabled = true;
+    arr1.push({
+      name: currentShipDetails.name,
+      label: targetCell.getAttribute('aria-label'),
+      axis: player1.gameboard.axis,
+      length: currentShipDetails.length,
+    });
+    player1.gameboard.ships = arr1;
+
     player2.gameboard.placeShip(
       xP2,
       yP2,
       currentShipDetails.name,
       player1.gameboard.axis,
     ); // for each placement, the computer will use tha same axis the player used
+    arr2.push({
+      name: currentShipDetails.name,
+      label: computerCoord.join(''),
+      axis: player1.gameboard.axis,
+      length: currentShipDetails.length,
+    });
+    player2.gameboard.ships = arr2;
 
     placementCounter += 1;
     if (placementCounter === 5) {
@@ -261,14 +285,40 @@ function initPlacementPage(container, navigateTo, opts = {}) {
 export function initBattlePage(container, navigateTo, opts = {}) {
   const player1 = opts.player1;
   const player2 = opts.player2;
-  const statusText = container.querySelector('.status__text');
-  const statusName = container.querySelector('.status__text--name');
-  const boardCells = container.querySelectorAll('.board__cell--enemy');
+  const enemyCells = container.querySelectorAll('.board__cell--enemy');
 
-  statusName.textContent =
-    player1.playerName.charAt(0).toUpperCase() +
-    player1.playerName.slice(1).toLowerCase();
-  // animate status text so that every appearing text appears from lower scale and opacity to an increasing one
+  function renderPlayerShipsOnBattleGrid() {
+    const playerShips = player1.gameboard.ships;
+    const computerShips = player2.gameboard.ships;
+
+    playerShips.forEach((ship) => {
+      // ship.positions is an array of {x,y}, length is positions.length
+      // find the DOM cell matching the origin position
+      const name = ship.name;
+      const ariaLabel = ship.label;
+      const targetCell = container.querySelector(
+        `.board__cell--friendly[aria-label='${ariaLabel}']`,
+      );
+      const length = ship.length;
+      const axis = ship.axis;
+
+      showPlacedShip(name, targetCell, axis, length);
+    });
+
+    computerShips.forEach((ship) => {
+      const name = ship.name;
+      const ariaLabel = ship.label;
+      const targetCell = container.querySelector(
+        `.board__cell--enemy[aria-label='${ariaLabel}']`,
+      );
+      const length = ship.length;
+      const axis = ship.axis;
+
+      showPlacedShip(name, targetCell, axis, length, true);
+    });
+  }
+
+  renderPlayerShipsOnBattleGrid();
 
   function attack(e) {
     const x = Number(e.target.getAttribute('aria-label').split('')[0]);
@@ -278,16 +328,15 @@ export function initBattlePage(container, navigateTo, opts = {}) {
     if (validAttack) {
       const isAHit = player1.attack(player2, x, y).hit;
       showAttackedCell(e, isAHit);
-      console.log(player2.gameboard.shots);
     }
   }
 
-  boardCells.forEach((cell) => {
+  enemyCells.forEach((cell) => {
     cell.addEventListener('click', attack);
   });
 
   return function cleanup() {
-    boardCells.forEach((cell) => {
+    enemyCells.forEach((cell) => {
       cell.removeEventListener('click', attack);
     });
   };
