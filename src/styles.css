@@ -232,15 +232,25 @@ body {
 
 /* ship width and appearance */
 .ship-appe {
-  height: 3rem;
-  z-index: -10;
+  height: 2rem;
+  z-index: -15;
+}
+.axis-x {
+  position: absolute;
+  bottom: 0.8rem;
 }
 .axis-y {
   transform: rotate(90deg);
   transform-origin: top left;
   position: absolute;
   top: 0;
-  left: 3.2rem;
+  left: 2.8rem;
+}
+.ship-shown {
+  visibility: visible;
+}
+.ship-hidden {
+  visibility: hidden;
 }
 .l-5 {
   width: 15.4rem;
@@ -253,42 +263,6 @@ body {
 }
 .l-2 {
   width: 6.4rem;
-}
-
-/* Status box */
-.status {
-  width: 100%;
-}
-.status__box {
-  background: var(--panel);
-  border: 2px solid var(--accent);
-  border-radius: 1rem;
-  padding: 1rem;
-  margin: 0 auto 1.25rem auto;
-  max-width: 80%;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-}
-.status__text {
-  margin: 0;
-  font-weight: 500;
-  font-size: 1.6rem;
-  letter-spacing: 0.125rem;
-  color: var(--accent);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-}
-.status__text.status__text-animate {
-  animation: growAndFadeIn 1s ease forwards;
-}
-@keyframes growAndFadeIn {
-  from {
-    transform: scale(0.4);
-    opacity: 0.3;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 /* Boards container */
@@ -353,19 +327,7 @@ body {
 /* Cell state modifiers (visual only) */
 .board__cell--known {
   display: flex;
-  justify-content: center;
   align-items: center;
-}
-/* .board__cell--hit {
-  background: var(--hit);
-  border-color: var(--hit);
-} */
-/* .board__cell--miss {
-  background: transparent;
-  border-color: var(--miss);
-} */
-.board__cell--ship {
-  background: rgba(143, 179, 255, 0.12);
 }
 
 /* Winner page */
@@ -435,18 +397,11 @@ body {
     max-width: 44rem;
     width: 48%;
   }
-  .status__box {
-    max-width: 60%;
-    padding: 1rem;
-  }
   .header__inner {
     padding: 0 1rem;
   }
   .placement__title {
     font-size: 1.7rem;
-  }
-  .winner__title {
-    font-size: 2rem;
   }
   .l-5 {
     width: 20.4rem;
@@ -459,5 +414,17 @@ body {
   }
   .l-2 {
     width: 8.4rem;
+  }
+  .ship-appe {
+    height: 3rem;
+  }
+  .axis-x {
+    bottom: 0.5rem;
+  }
+  .axis-y {
+    left: 3.2rem;
+  }
+  .winner__title {
+    font-size: 2rem;
   }
 }
