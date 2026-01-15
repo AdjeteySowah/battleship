@@ -1,9 +1,11 @@
-import { isValidPlacement } from '../utils/helpers.js';
+import { isValidAttack, isValidPlacement } from '../utils/helpers.js';
 
-export function genRandomAttackCoord() {
+export function genRandomAttackCoord(shots) {
   const x = Math.floor(Math.random() * 10);
   const y = Math.floor(Math.random() * 10);
-  return [x, y];
+
+  const valid = isValidAttack(x, y, shots);
+  return valid ? [x, y] : genRandomAttackCoord(shots);
 }
 
 export function genRandomPlacementCoord(length, axis, board, size) {
