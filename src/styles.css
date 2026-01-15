@@ -50,7 +50,6 @@ button {
   --panel: rgba(255, 255, 255, 0.05);
   --accent: #cfe6ff;
   --hit: #ff6b6b;
-  --miss: #8fb3ff;
   --cell-size: 3rem;
   --gap: 0.2rem;
 }
@@ -120,11 +119,9 @@ body {
   position: absolute;
   right: 0;
 }
-.header__audio--start {
-  position: static;
-}
 .header__audio img {
   display: block;
+  pointer-events: none;
 }
 
 /* Main layout blocks */
@@ -387,6 +384,12 @@ body {
   :root {
     --cell-size: 4rem;
   }
+  .header__inner {
+    padding: 0 1rem;
+  }
+  .header__audio--start {
+    position: static;
+  }
   .boards {
     flex-direction: row;
     align-items: flex-start;
@@ -396,9 +399,6 @@ body {
   .board {
     max-width: 44rem;
     width: 48%;
-  }
-  .header__inner {
-    padding: 0 1rem;
   }
   .placement__title {
     font-size: 1.7rem;
