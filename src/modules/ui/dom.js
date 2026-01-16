@@ -6,24 +6,24 @@ import cruiserSvg from '../../assets/images/cruiser-img.svg';
 import submarineSvg from '../../assets/images/submarine-img.svg';
 import destroyerSvg from '../../assets/images/destroyer-img.svg';
 
-export function toggleSoundIcon(e) {
-  const btn = e.target.closest('.header__audio');
+export function renderAudioIcon(container, state) {
+  const btn = container.querySelector('.header__audio');
   if (!btn) return;
 
-  if (btn.classList.contains('header__audio--on')) {
-    btn.classList.replace('header__audio--on', 'header__audio--off');
+  const icon = btn.querySelector('img');
+
+  if (state === 'off') {
+    btn.classList.remove('header__audio--on');
+    btn.classList.add('header__audio--off');
     btn.setAttribute('aria-pressed', 'true');
-
-    const icon = btn.querySelector('img');
-    icon.setAttribute('src', musicOffIcon);
-    icon.setAttribute('alt', 'music-off icon');
+    icon.src = musicOffIcon;
+    icon.alt = 'music-off icon';
   } else {
-    btn.classList.replace('header__audio--off', 'header__audio--on');
+    btn.classList.remove('header__audio--off');
+    btn.classList.add('header__audio--on');
     btn.setAttribute('aria-pressed', 'false');
-
-    const icon = btn.querySelector('img');
-    icon.setAttribute('src', musicOnIcon);
-    icon.setAttribute('alt', 'music-on icon');
+    icon.src = musicOnIcon;
+    icon.alt = 'music-on icon';
   }
 }
 
@@ -88,8 +88,8 @@ export function showPlacedShip(
   targetCell.appendChild(wrapper);
 }
 
-export function showAttackedCell(e, hit) {
-  if (!e.target.classList.contains('board__cell--unknown')) return;
+export function showAttackedCell(targetCell, hit) {
+  if (!targetCell.classList.contains('board__cell--unknown')) return;
 
   const bullet = document.createElement('div');
   bullet.style.cssText =
@@ -98,6 +98,6 @@ export function showAttackedCell(e, hit) {
     ? (bullet.style.backgroundColor = 'rgb(255, 107, 107)')
     : (bullet.style.backgroundColor = 'rgb(255, 255, 255)');
 
-  e.target.classList.replace('board__cell--unknown', 'board__cell--known');
-  e.target.appendChild(bullet);
+  targetCell.classList.replace('board__cell--unknown', 'board__cell--known');
+  targetCell.appendChild(bullet);
 }
