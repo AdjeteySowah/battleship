@@ -62,3 +62,8 @@ export function isValidPlacement(x, y, length, axis, board, size) {
 export function isValidAttack(x, y, shots) {
   return shots[x][y] === 'U' ? true : false;
 }
+
+export function hasShipSunk(x, y, board) {
+  if (board[x][y] === null) return;
+  return board[x][y].isSunk();
+}
