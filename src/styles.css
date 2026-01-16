@@ -312,6 +312,7 @@ body {
   cursor: default;
   border-radius: 0.15rem;
   outline: none;
+  position: relative;
 }
 .board__cell:focus {
   box-shadow: 0 0 0 3px rgba(207, 230, 255, 0.15);
