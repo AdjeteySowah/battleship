@@ -2,10 +2,14 @@ import startHtml from '../../pages/start.html';
 import placementHtml from '../../pages/placement.html';
 import battleHtml from '../../pages/battle.html';
 import winnerHtml from '../../pages/winner.html';
+
 import startSound from '../../assets/audio/start.mp3';
+import shotSound from '../../assets/audio/fire_shot.mp3';
+import hitSound from '../../assets/audio/shot_hit.mp3';
+import missSound from '../../assets/audio/shot_miss.mp3';
 
 import {
-  toggleSoundIcon,
+  renderAudioIcon,
   displayInputErrMsg,
   showCurrentAxis,
   showPlacedShip,
@@ -17,23 +21,62 @@ import {
   isValidPlacement,
   isValidAttack,
 } from '../utils/helpers.js';
-import { genRandomPlacementCoord } from '../components/ai.js';
+import {
+  genRandomAttackCoord,
+  genRandomPlacementCoord,
+} from '../components/ai.js';
 import { boardSize } from '../utils/constants.js';
 
 const startAudio = new Audio(startSound);
+const shotAudio = new Audio(shotSound);
+const hitAudio = new Audio(hitSound);
+const missAudio = new Audio(missSound);
 startAudio.preload = 'auto';
-async function playStartingSound() {
-  try {
-    await startAudio.play();
-    startAudio.loop = true;
-    startAudio.volume = 0.2;
-  } catch (err) {
-    console.error('play failed:', err);
+shotAudio.preload = 'auto';
+hitAudio.preload = 'auto';
+missAudio.preload = 'auto';
+
+async function playSound(aHit) {
+  const page = document.querySelector('.page');
+  const notBattlePage =
+    page.classList.contains('page--start') ||
+    page.classList.contains('page--placement') ||
+    page.classList.contains('page--winner');
+
+  if (notBattlePage) {
+    try {
+      startAudio.loop = true;
+      startAudio.volume = 0.2;
+      startAudio.muted = false;
+      await startAudio.play();
+    } catch (err) {
+      console.error('play failed:', err);
+    }
+  } else {
+    try {
+      await shotAudio.play();
+
+      await new Promise((res) => setTimeout(res, 1500));
+
+      const sfx = aHit ? hitAudio : missAudio;
+      await sfx.play();
+    } catch (err) {
+      console.error('play failed:', err);
+    }
   }
 }
 
-function muteStartingSound() {
-  startAudio.pause();
+function muteSound() {
+  startAudio.volume = 0;
+  startAudio.muted = true;
+}
+
+function getAudioState() {
+  return sessionStorage.getItem('audioState') || 'on'; // on at start page mount
+}
+
+function setAudioState(state) {
+  sessionStorage.setItem('audioState', state);
 }
 
 export function initWindowListener() {
@@ -47,7 +90,11 @@ export function initWindowListener() {
     window.removeEventListener('touchstart', onFirstGesture);
     window.removeEventListener('keydown', onFirstGesture);
 
-    await playStartingSound();
+    if (getAudioState() === 'on') {
+      await playSound();
+    } else {
+      muteSound();
+    }
   };
 
   window.addEventListener('pointerdown', onFirstGesture, { passive: true });
@@ -55,19 +102,28 @@ export function initWindowListener() {
   window.addEventListener('keydown', onFirstGesture, { passive: true });
 }
 
-export function listenForAudioIconClick() {
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('.header__audio')) {
-      const audioBtn = e.target.closest('.header__audio');
-      if (audioBtn.classList.contains('header__audio--on')) {
-        muteStartingSound();
-        toggleSoundIcon(e);
-      } else {
-        playStartingSound();
-        toggleSoundIcon(e);
-      }
+const onAudioIconClick = (e, fromBattePage = false) => {
+  const btn = e.target.classList.contains('header__audio') ? e.target : null;
+  if (!btn) return;
+
+  const current = getAudioState();
+  const next = current === 'on' ? 'off' : 'on';
+
+  setAudioState(next);
+
+  if (!fromBattePage) {
+    if (next === 'off') {
+      muteSound();
+    } else {
+      playSound();
     }
-  });
+  }
+
+  renderAudioIcon(document, next);
+};
+
+export function listenForAudioIconClick() {
+  document.addEventListener('click', onAudioIconClick);
 }
 
 const pages = {
@@ -94,6 +150,7 @@ export function mount(pageKey, opts = {}) {
   const tpl = document.createElement('template');
   tpl.innerHTML = page.html.trim();
   body.replaceChildren(tpl.content.cloneNode(true));
+  renderAudioIcon(body, getAudioState());
 
   const cleanup = page.init ? page.init(body, navigateTo, opts) : null;
   if (typeof cleanup === 'function') body._cleanup = cleanup;
@@ -180,7 +237,7 @@ function initPlacementPage(container, navigateTo, opts = {}) {
       if (validCells) {
         const validCellsStringified = validCells.map((pair) => pair.join(''));
         validBtns = validCellsStringified.map((cellCoord) => {
-          return document.querySelector(`button[aria-label="${cellCoord}"]`);
+          return container.querySelector(`button[aria-label="${cellCoord}"]`);
         });
         validBtns.forEach((btn) => {
           btn.style.backgroundColor = 'rgba(255, 255, 255, 0.6)';
@@ -286,14 +343,16 @@ export function initBattlePage(container, navigateTo, opts = {}) {
   const player1 = opts.player1;
   const player2 = opts.player2;
   const enemyCells = container.querySelectorAll('.board__cell--enemy');
+  const audioBtn = container.querySelector('.header__audio');
+
+  document.removeEventListener('click', onAudioIconClick);
+  muteSound();
 
   function renderPlayerShipsOnBattleGrid() {
     const playerShips = player1.gameboard.ships;
     const computerShips = player2.gameboard.ships;
 
     playerShips.forEach((ship) => {
-      // ship.positions is an array of {x,y}, length is positions.length
-      // find the DOM cell matching the origin position
       const name = ship.name;
       const ariaLabel = ship.label;
       const targetCell = container.querySelector(
@@ -320,24 +379,89 @@ export function initBattlePage(container, navigateTo, opts = {}) {
 
   renderPlayerShipsOnBattleGrid();
 
-  function attack(e) {
-    const x = Number(e.target.getAttribute('aria-label').split('')[0]);
-    const y = Number(e.target.getAttribute('aria-label').split('')[1]);
-    const validAttack = isValidAttack(x, y, player2.gameboard.shots);
+  function playOrMuteSound(e) {
+    const fromBattePage = true;
+    onAudioIconClick(e, fromBattePage); // render icon state before muting/unmuting sound
 
-    if (validAttack) {
-      const isAHit = player1.attack(player2, x, y).hit;
-      showAttackedCell(e, isAHit);
+    if (getAudioState() === 'on') {
+      shotAudio.volume = 0.5;
+      hitAudio.volume = 0.5;
+      missAudio.volume = 0.5;
+    } else if (getAudioState() === 'off') {
+      shotAudio.volume = 0;
+      hitAudio.volume = 0;
+      missAudio.volume = 0;
     }
   }
 
+  function changeBgColor(e) {
+    if (e.type === 'mouseenter') {
+      const label = e.target.getAttribute('aria-label');
+      const x = Number(label.split('')[0]);
+      const y = Number(label.split('')[1]);
+
+      const valid = isValidAttack(x, y, player2.gameboard.shots);
+      if (valid) {
+        e.target.style.cssText =
+          'cursor: crosshair; background-color: rgba(107, 255, 107, 0.6);';
+        e.disabled = false;
+      } else {
+        e.target.style.cssText =
+          'cursor: not-allowed; background-color: rgba(255, 107, 107, 0.6);';
+        e.target.disabled = true;
+      }
+    }
+
+    if (e.type === 'mouseleave') {
+      e.target.style.backgroundColor = 'transparent';
+    }
+  }
+
+  function attack(e) {
+    const targetCell = e.target;
+    const xP1 = Number(targetCell.getAttribute('aria-label').split('')[0]);
+    const yP1 = Number(targetCell.getAttribute('aria-label').split('')[1]);
+    const computerCoord = genRandomAttackCoord(player1.gameboard.shots);
+    const xP2 = computerCoord[0];
+    const yP2 = computerCoord[1];
+
+    function attackComputer() {
+      const isAHit = player1.attack(player2, xP1, yP1).hit;
+      playSound(isAHit);
+      showAttackedCell(targetCell, isAHit);
+      targetCell.style.cssText =
+        'cursor: not-allowed; background-color: rgba(255, 107, 107, 0.6);';
+      targetCell.disabled = true;
+    }
+    function attackPlayer() {
+      const label = computerCoord.join('');
+      const targetCell = container.querySelector(
+        `.board__cell--friendly[aria-label="${label}"]`,
+      );
+      const isAHit = player2.attack(player1, xP2, yP2).hit;
+      playSound(isAHit);
+      showAttackedCell(targetCell, isAHit);
+    }
+
+    attackComputer();
+    setTimeout(() => {
+      attackPlayer();
+    }, 3500);
+  }
+
+  audioBtn.addEventListener('click', playOrMuteSound);
   enemyCells.forEach((cell) => {
     cell.addEventListener('click', attack);
+    cell.addEventListener('mouseenter', changeBgColor);
+    cell.addEventListener('mouseleave', changeBgColor);
   });
 
   return function cleanup() {
+    audioBtn.removeEventListener('click', playOrMuteSound);
     enemyCells.forEach((cell) => {
       cell.removeEventListener('click', attack);
+      cell.removeEventListener('mouseenter', changeBgColor);
+      cell.removeEventListener('mouseleave', changeBgColor);
     });
   };
 }
