@@ -14,12 +14,14 @@ import {
   showCurrentAxis,
   showPlacedShip,
   showAttackedCell,
+  revealShip,
 } from './dom.js';
 import { createPlayer } from '../components/player.js';
 import {
   getCurrentShipDetails,
   isValidPlacement,
   isValidAttack,
+  hasShipSunk,
 } from '../utils/helpers.js';
 import {
   genRandomAttackCoord,
@@ -46,7 +48,7 @@ async function playSound(aHit) {
   if (notBattlePage) {
     try {
       startAudio.loop = true;
-      startAudio.volume = 0.2;
+      startAudio.volume = 0.5;
       startAudio.muted = false;
       await startAudio.play();
     } catch (err) {
@@ -313,6 +315,7 @@ function initPlacementPage(container, navigateTo, opts = {}) {
       length: currentShipDetails.length,
     });
     player2.gameboard.ships = arr2;
+    player2.gameboard.board[xP2][yP2].origin = computerCoord.join('');
 
     placementCounter += 1;
     if (placementCounter === 5) {
@@ -432,6 +435,9 @@ export function initBattlePage(container, navigateTo, opts = {}) {
       targetCell.style.cssText =
         'cursor: not-allowed; background-color: rgba(255, 107, 107, 0.6);';
       targetCell.disabled = true;
+
+      const shipSunk = hasShipSunk(xP1, yP1, player2.gameboard.board);
+      if (shipSunk) revealShip(xP1, yP1, player2.gameboard.board, container);
     }
     function attackPlayer() {
       const label = computerCoord.join('');
@@ -465,3 +471,18 @@ export function initBattlePage(container, navigateTo, opts = {}) {
     });
   };
 }
+
+// export function initWinnerPage(container, navigateTo, opts = {}) {
+//   const nameEl = body.querySelector('#winner-name');
+//   const winner = opts.winner || sessionStorage.getItem('winner') || 'Unknown';
+//   if (nameEl) nameEl.textContent = winner;
+//   const btn = body.querySelector('.play-again');
+//   function onPlayAgain() { navigateTo('start'); }
+//   if (btn) btn.addEventListener('click', onPlayAgain);
+//   const heading = body.querySelector('h1');
+//   if (heading) heading.focus();
+
+//   return function cleanup() {
+//     if (btn) btn.removeEventListener('click', onPlayAgain);
+//   };
+// }
