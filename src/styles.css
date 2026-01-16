@@ -270,7 +270,7 @@ body {
   align-items: center;
 }
 
-/* Board block */
+/* Board */
 .board {
   width: 100%;
   max-width: 36rem;
@@ -290,6 +290,9 @@ body {
   margin: 0 0 0.6rem 0;
   font-size: 1.8rem;
   color: var(--accent);
+}
+.board-locked {
+  pointer-events: none;
 }
 
 /* Grid representation */
