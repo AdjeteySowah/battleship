@@ -101,6 +101,15 @@ export function showAttackedCell(targetCell, hit) {
   targetCell.appendChild(bullet);
 }
 
+export function lockBoard(container) {
+  const enemyBoard = container.querySelector('.board--enemy');
+  enemyBoard.classList.add('board-locked');
+}
+export function unlockBoard(container) {
+  const enemyBoard = container.querySelector('.board--enemy');
+  enemyBoard.classList.remove('board-locked');
+}
+
 export function revealShip(x, y, board, container) {
   const label = board[x][y].origin;
   const cellWithShip = container.querySelector(
