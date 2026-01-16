@@ -84,7 +84,6 @@ export function showPlacedShip(
   }
 
   wrapper.appendChild(img);
-  targetCell.style.position = 'relative';
   targetCell.appendChild(wrapper);
 }
 
@@ -100,4 +99,12 @@ export function showAttackedCell(targetCell, hit) {
 
   targetCell.classList.replace('board__cell--unknown', 'board__cell--known');
   targetCell.appendChild(bullet);
+}
+
+export function revealShip(x, y, board, container) {
+  const label = board[x][y].origin;
+  const cellWithShip = container.querySelector(
+    `.board__cell--enemy[aria-label="${label}"]`,
+  );
+  cellWithShip.children[0].classList.replace('ship-hidden', 'ship-shown');
 }
