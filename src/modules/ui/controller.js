@@ -14,6 +14,8 @@ import {
   showCurrentAxis,
   showPlacedShip,
   showAttackedCell,
+  lockBoard,
+  unlockBoard,
   revealShip,
 } from './dom.js';
 import { createPlayer } from '../components/player.js';
@@ -132,7 +134,7 @@ const pages = {
   start: { html: startHtml, init: initStartPage },
   placement: { html: placementHtml, init: initPlacementPage },
   battle: { html: battleHtml, init: initBattlePage },
-  // winner: { html: winnerHtml, init: initWinnerPage },
+  winner: { html: winnerHtml, init: initWinnerPage },
 };
 
 // mount and navigate
@@ -342,7 +344,7 @@ function initPlacementPage(container, navigateTo, opts = {}) {
   };
 }
 
-export function initBattlePage(container, navigateTo, opts = {}) {
+function initBattlePage(container, navigateTo, opts = {}) {
   const player1 = opts.player1;
   const player2 = opts.player2;
   const enemyCells = container.querySelectorAll('.board__cell--enemy');
@@ -430,29 +432,45 @@ export function initBattlePage(container, navigateTo, opts = {}) {
 
     function attackComputer() {
       const isAHit = player1.attack(player2, xP1, yP1).hit;
-      playSound(isAHit);
       showAttackedCell(targetCell, isAHit);
+      playSound(isAHit);
       targetCell.style.cssText =
         'cursor: not-allowed; background-color: rgba(255, 107, 107, 0.6);';
       targetCell.disabled = true;
 
+      if (player2.gameboard.allSunk()) {
+        navigateTo('winner', { player1 });
+        return;
+      }
+
+      lockBoard(container);
+
       const shipSunk = hasShipSunk(xP1, yP1, player2.gameboard.board);
       if (shipSunk) revealShip(xP1, yP1, player2.gameboard.board, container);
     }
-    function attackPlayer() {
+    async function attackPlayer() {
       const label = computerCoord.join('');
       const targetCell = container.querySelector(
         `.board__cell--friendly[aria-label="${label}"]`,
       );
       const isAHit = player2.attack(player1, xP2, yP2).hit;
-      playSound(isAHit);
       showAttackedCell(targetCell, isAHit);
+      await playSound(isAHit);
+
+      if (player1.gameboard.allSunk()) {
+        navigateTo('winner', { player2 });
+        return;
+      }
+
+      unlockBoard(container);
     }
 
     attackComputer();
-    setTimeout(() => {
-      attackPlayer();
-    }, 3500);
+    if (!player2.gameboard.allSunk()) {
+      setTimeout(() => {
+        attackPlayer();
+      }, 3500);
+    }
   }
 
   audioBtn.addEventListener('click', playOrMuteSound);
@@ -472,17 +490,10 @@ export function initBattlePage(container, navigateTo, opts = {}) {
   };
 }
 
-// export function initWinnerPage(container, navigateTo, opts = {}) {
-//   const nameEl = body.querySelector('#winner-name');
-//   const winner = opts.winner || sessionStorage.getItem('winner') || 'Unknown';
-//   if (nameEl) nameEl.textContent = winner;
-//   const btn = body.querySelector('.play-again');
-//   function onPlayAgain() { navigateTo('start'); }
-//   if (btn) btn.addEventListener('click', onPlayAgain);
-//   const heading = body.querySelector('h1');
-//   if (heading) heading.focus();
+function initWinnerPage(container, navigateTo, opts = {}) {
+  console.log('winner page initiated!');
 
-//   return function cleanup() {
-//     if (btn) btn.removeEventListener('click', onPlayAgain);
-//   };
-// }
+  // return function cleanup() {
+  //   if (btn) btn.removeEventListener('click', onPlayAgain);
+  // };
+}
