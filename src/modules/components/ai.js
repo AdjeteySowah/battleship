@@ -53,7 +53,7 @@ export function genRandomAttackCoord(shots, board) {
           }
         }
 
-        if (directionSet) {
+        if (rightward || leftward || upward || downward) {
           if (rightward) {
             while (!isValidAttack(x, y, shots)) {
               y += 1;
