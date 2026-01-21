@@ -24,10 +24,12 @@ import {
   isValidPlacement,
   isValidAttack,
   hasShipSunk,
+  resetItemNum,
 } from '../utils/helpers.js';
 import {
   genRandomAttackCoord,
   genRandomPlacementCoord,
+  resetTrackers,
 } from '../components/ai.js';
 import { boardSize } from '../utils/constants.js';
 
@@ -182,7 +184,6 @@ function initStartPage(container, navigateTo) {
       return;
     }
     const name = input.value.trim();
-    sessionStorage.setItem('playerName', name);
     const player1 = createPlayer({ playerName: name, isComputer: false });
     const player2 = createPlayer({ playerName: 'COMPUTER', isComputer: true });
     navigateTo('placement', { player1, player2 });
@@ -214,8 +215,7 @@ function initPlacementPage(container, navigateTo, opts = {}) {
   const axisBtn = container.querySelector('.placement__axis');
   const boardCells = container.querySelectorAll('.board__cell');
 
-  titleName.textContent =
-    player1.playerName || sessionStorage.getItem('playerName');
+  titleName.textContent = player1.playerName;
   titleShip.textContent = 'CARRIER';
 
   function changeAxis() {
@@ -349,6 +349,7 @@ function initBattlePage(container, navigateTo, opts = {}) {
   const player2 = opts.player2;
   const enemyCells = container.querySelectorAll('.board__cell--enemy');
   const audioBtn = container.querySelector('.header__audio');
+  const localTimeouts = [];
 
   document.removeEventListener('click', onAudioIconClick);
   muteSound();
@@ -426,7 +427,10 @@ function initBattlePage(container, navigateTo, opts = {}) {
     const targetCell = e.target;
     const xP1 = Number(targetCell.getAttribute('aria-label').split('')[0]);
     const yP1 = Number(targetCell.getAttribute('aria-label').split('')[1]);
-    const computerCoord = genRandomAttackCoord(player1.gameboard.shots);
+    const computerCoord = genRandomAttackCoord(
+      player1.gameboard.shots,
+      player1.gameboard.board,
+    );
     const xP2 = computerCoord[0];
     const yP2 = computerCoord[1];
 
@@ -491,9 +495,32 @@ function initBattlePage(container, navigateTo, opts = {}) {
 }
 
 function initWinnerPage(container, navigateTo, opts = {}) {
-  console.log('winner page initiated!');
+  const player = opts.player1 ?? opts.player2;
+  const winnerName = container.querySelector('.winner__name');
+  const btn = container.querySelector('.winner__button');
+  let winnerTimeoutId = null;
 
-  // return function cleanup() {
-  //   if (btn) btn.removeEventListener('click', onPlayAgain);
-  // };
+  document.addEventListener('click', onAudioIconClick);
+  playSound();
+
+  winnerTimeoutId = setTimeout(() => {
+    winnerName.textContent = player.playerName;
+    winnerName.classList.add('winner__name--animate');
+  }, 1500);
+
+  const onPlayAgain = () => {
+    resetItemNum();
+    resetTrackers();
+    navigateTo('start');
+  };
+
+  btn.addEventListener('click', onPlayAgain);
+
+  return function cleanup() {
+    btn.removeEventListener('click', onPlayAgain);
+    if (winnerTimeoutId) {
+      clearTimeout(winnerTimeoutId);
+      winnerTimeoutId = null;
+    }
+  };
 }
