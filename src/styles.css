@@ -1,14 +1,6 @@
 /* || HOST FONTS */
 @font-face {
   font-family: 'ubuntu';
-  font-weight: 500;
-  src:
-    url('./assets/fonts/ubuntu-medium-webfont.woff2') format('woff2'),
-    url('./assets/fonts/ubuntu-medium-webfont.woff') format('woff');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'ubuntu';
   font-weight: 700;
   src:
     url('./assets/fonts/ubuntu-bold-webfont.woff2') format('woff2'),
@@ -36,7 +28,7 @@ img {
 }
 p,
 h1,
-h3,
+h2,
 input,
 button {
   font: inherit;
@@ -76,8 +68,6 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  /* justify-content: center;
-  align-items: flex-start; */
 }
 
 /* Page container */
@@ -93,22 +83,16 @@ body {
 }
 .header__inner {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
   position: relative;
 }
-.header__inner--center {
-  flex-direction: column;
-  /* justify-content: center; */
-}
 .header__logo {
   display: block;
   max-width: 100%;
   height: auto;
-}
-.header__logo--big {
-  width: 80rem;
 }
 .header__audio {
   display: block;
@@ -116,8 +100,7 @@ body {
   border: none;
   cursor: pointer;
   padding: 0.25rem;
-  position: absolute;
-  right: 0;
+  position: static;
 }
 .header__audio img {
   display: block;
@@ -144,7 +127,7 @@ body {
 .start__title {
   font-size: 2rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08rem;
 }
 .start__form {
   display: flex;
@@ -169,7 +152,7 @@ body {
 }
 .start__input::placeholder {
   color: #666;
-  font-weight: 600;
+  font-weight: 700;
 }
 .start__err-msg {
   color: var(--hit);
@@ -204,7 +187,6 @@ body {
   padding-top: 1rem;
 }
 .placement__title {
-  font-family: 'Oswald', 'Arial Black', Arial, sans-serif;
   text-transform: uppercase;
   margin: 0;
   font-size: 1.3rem;
@@ -284,9 +266,8 @@ body {
   margin-left: auto;
 }
 .board__title {
-  font-family: 'Oswald', 'Arial Black', Arial, sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.08rem;
   margin: 0 0 0.6rem 0;
   font-size: 1.8rem;
   color: var(--accent);
@@ -343,7 +324,7 @@ body {
 .winner__title {
   font-size: 2rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08rem;
   margin: 0;
 }
 .winner__box {
@@ -352,7 +333,7 @@ body {
 .winner__name {
   margin: 0;
   font-size: 4rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   color: rgb(255, 255, 255);
 }
@@ -410,6 +391,17 @@ body {
   }
   .header__inner {
     padding: 0 1rem;
+    flex-direction: row;
+  }
+  .header__inner--center {
+    flex-direction: column;
+  }
+  .header__logo--big {
+    width: 80rem;
+  }
+  .header__audio {
+    position: absolute;
+    right: 0;
   }
   .header__audio--start {
     position: static;
