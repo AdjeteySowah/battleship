@@ -177,6 +177,10 @@ function initStartPage(container, navigateTo) {
     return ok;
   }
 
+  function allowOnlyAlphanumeric(e) {
+    e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, '');
+  }
+
   const onStart = () => {
     if (!validate()) {
       displayInputErrMsg(container, input);
@@ -197,12 +201,14 @@ function initStartPage(container, navigateTo) {
   };
 
   document.addEventListener('keydown', onKey);
+  input.addEventListener('input', allowOnlyAlphanumeric);
   btn.addEventListener('click', onStart);
 
   input.focus();
 
   return function cleanup() {
     document.removeEventListener('keydown', onKey);
+    input.removeEventListener('input', allowOnlyAlphanumeric);
     btn.removeEventListener('click', onStart);
   };
 }
