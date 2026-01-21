@@ -349,7 +349,6 @@ function initBattlePage(container, navigateTo, opts = {}) {
   const player2 = opts.player2;
   const enemyCells = container.querySelectorAll('.board__cell--enemy');
   const audioBtn = container.querySelector('.header__audio');
-  const localTimeouts = [];
 
   document.removeEventListener('click', onAudioIconClick);
   muteSound();
