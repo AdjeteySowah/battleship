@@ -335,27 +335,29 @@ body {
 .winner {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
-  padding-top: 2.5rem;
+  gap: 5rem;
+  height: 100%;
 }
 .winner__title {
-  font-size: 1.6rem;
+  font-size: 2rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0;
 }
 .winner__box {
-  background: var(--panel);
-  padding: 1rem 1.5rem;
-  border-radius: 0.5rem;
   text-align: center;
 }
 .winner__name {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 4rem;
   font-weight: 800;
-  color: var(--accent);
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+}
+.winner__name--animate {
+  animation: scaleUp 0.5s linear forwards;
 }
 .winner__button {
   margin-top: 0.6rem;
@@ -368,6 +370,24 @@ body {
 }
 .winner__button:focus {
   outline: 3px solid rgba(207, 230, 255, 0.15);
+}
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.25);
+    opacity: 0.15;
+  }
+  25% {
+    transform: scale(0.5);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(0.75);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Utility */
@@ -429,6 +449,9 @@ body {
     left: 3.2rem;
   }
   .winner__title {
-    font-size: 2rem;
+    font-size: 2.5rem;
+  }
+  .winner__name {
+    font-size: 8rem;
   }
 }
