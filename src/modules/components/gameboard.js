@@ -61,13 +61,6 @@ export function createGameboard({
     return sunkShips >= totalShips;
   }
 
-  function reset() {
-    board = makeGrid(null);
-    shots = makeGrid('U');
-    sunkShips = 0;
-    axis = defaultAxis;
-  }
-
   return {
     axis,
     board,
@@ -76,6 +69,5 @@ export function createGameboard({
     placeShip,
     receiveAttack,
     allSunk,
-    reset,
   };
 }
