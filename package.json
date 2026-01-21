@@ -6,8 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "lint": "eslint \"src/**/*.js\"",
-    "test": "jest --verbose"
+    "lint": "eslint",
+    "test": "jest --verbose",
+    "format": "prettier --write"
   },
   "keywords": [],
   "author": "",
