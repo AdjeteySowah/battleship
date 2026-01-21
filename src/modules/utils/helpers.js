@@ -67,3 +67,7 @@ export function hasShipSunk(x, y, board) {
   if (board[x][y] === null) return;
   return board[x][y].isSunk();
 }
+
+export function resetItemNum() {
+  itemNum = 0;
+}
