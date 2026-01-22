@@ -59,15 +59,17 @@ async function playSound(aHit) {
       console.error('play failed:', err);
     }
   } else {
-    try {
-      await shotAudio.play();
+    if (getAudioState() === 'on') {
+      try {
+        await shotAudio.play();
 
-      await new Promise((res) => setTimeout(res, 1500));
+        await new Promise((res) => setTimeout(res, 1500));
 
-      const sfx = aHit ? hitAudio : missAudio;
-      await sfx.play();
-    } catch (err) {
-      console.error('play failed:', err);
+        const sfx = aHit ? hitAudio : missAudio;
+        await sfx.play();
+      } catch (err) {
+        console.error('play failed:', err);
+      }
     }
   }
 }
