@@ -91,7 +91,7 @@ export function initFirstGesture() {
   const container = document.querySelector('.page');
   let handled = false;
 
-  const onFirstGesture = async () => {
+  const onFirstGesture = async (e) => {
     if (handled) return;
     if (e.target.classList.contains('start__input')) return;
     handled = true;
