@@ -78,7 +78,7 @@ body {
 
 /* Header */
 .header {
-  margin: 5rem 0 0 2rem;
+  margin: 4rem 0 2rem 0;
   flex: 0 0 auto;
 }
 .header__inner {
