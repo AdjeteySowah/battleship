@@ -76,15 +76,7 @@ export function showWelcomeAlert() {
   if (localStorage.getItem('battleshipAlertShown')) return;
 
   alert(
-    `Thanks for playing Battleship! 🚢
-
-    How to play:
-    • Place your ships on the board.
-    • Take turns attacking coordinates on the enemy grid.
-    • A hit damages a ship; a miss ends your turn.
-    • Sink all enemy ships to win the game.
-
-    Good luck, Commander!`,
+    `Thanks for playing Battleship! 🚢 \n\nHow to play: \n• Place your ships on the board. \n• Take turns attacking coordinates on the enemy grid. \n• A hit damages a ship; a miss ends your turn. \n• Sink all enemy ships to win the game. \n\nGood luck, Commander!`,
   );
 
   localStorage.setItem('battleshipAlertShown', 'true');
