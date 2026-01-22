@@ -97,6 +97,8 @@ export function initWindowListener() {
     window.removeEventListener('pointerdown', onFirstGesture);
     window.removeEventListener('touchstart', onFirstGesture);
     window.removeEventListener('keydown', onFirstGesture);
+    window.removeEventListener('click', onFirstGesture);
+    window.removeEventListener('touchend', onFirstGesture);
 
     if (getAudioState() === 'on') {
       await playSound();
@@ -108,6 +110,8 @@ export function initWindowListener() {
   window.addEventListener('pointerdown', onFirstGesture, { passive: true });
   window.addEventListener('touchstart', onFirstGesture, { passive: true });
   window.addEventListener('keydown', onFirstGesture, { passive: true });
+  window.addEventListener('click', onFirstGesture);
+  window.addEventListener('touchend', onFirstGesture);
 }
 
 const onAudioIconClick = (e, fromBattePage = false) => {
