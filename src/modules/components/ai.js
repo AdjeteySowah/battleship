@@ -7,6 +7,8 @@ let rightward = false;
 let leftward = false;
 let upward = false;
 let downward = false;
+let skipRight = false;
+let skipLeft = false;
 
 export function genRandomAttackCoord(shots, board) {
   let x = Math.floor(Math.random() * 10);
@@ -23,13 +25,13 @@ export function genRandomAttackCoord(shots, board) {
         const directionSet = rightward || leftward || upward || downward;
         x = a; // gen rightward
         y = b + 1;
-        if (!isValidAttack(x, y, shots)) {
+        if (skipRight || !isValidAttack(x, y, shots)) {
           if (shots[x][y] === 'H') {
             if (!directionSet) rightward = true;
           } else {
             x = a; // gen leftward
             y = b - 1;
-            if (!isValidAttack(x, y, shots)) {
+            if (skipLeft || !isValidAttack(x, y, shots)) {
               if (shots[x][y] === 'H') {
                 if (!directionSet) leftward = true;
               } else {
@@ -76,6 +78,8 @@ export function genRandomAttackCoord(shots, board) {
             }
             if (board[x][y] === null) {
               upward = false;
+              skipRight = true;
+              skipLeft = true;
               hitTracker.push([x + 1, y]);
             }
           } else if (downward) {
@@ -84,6 +88,8 @@ export function genRandomAttackCoord(shots, board) {
             }
             if (board[x][y] === null) {
               downward = false;
+              skipRight = true;
+              skipLeft = true;
               hitTracker.push([x - 1, y]);
             }
           }
@@ -94,6 +100,8 @@ export function genRandomAttackCoord(shots, board) {
         if (leftward) leftward = false;
         if (upward) upward = false;
         if (downward) downward = false;
+        if (skipRight) skipRight = false;
+        if (skipLeft) skipLeft = false;
       }
 
       const prevShot = shot[0];
@@ -102,16 +110,16 @@ export function genRandomAttackCoord(shots, board) {
       if (shots[a][b] === 'H' && ship === undefined) {
         hitTracker.push([a, b]);
         ship = board[a][b];
-        x = a;
+        x = a; // gen rightward
         y = b + 1;
         if (!isValidAttack(x, y, shots)) {
-          x = a;
+          x = a; // gen leftward
           y = b - 1;
           if (!isValidAttack(x, y, shots)) {
-            x = a - 1;
+            x = a - 1; // gen upward
             y = b;
             if (!isValidAttack(x, y, shots)) {
-              x = a + 1;
+              x = a + 1; // gen downward
               y = b;
             }
           }
@@ -120,7 +128,6 @@ export function genRandomAttackCoord(shots, board) {
       shot.pop();
     }
     shot.push([x, y]);
-    // if (board[x][y] !== null) hitTracker.push([x, y]);
     return [x, y];
   } else {
     return genRandomAttackCoord(shots, board);
@@ -150,4 +157,6 @@ export function resetTrackers() {
   leftward = false;
   upward = false;
   downward = false;
+  skipRight = false;
+  skipLeft = false;
 }
