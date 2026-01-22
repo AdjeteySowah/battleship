@@ -87,18 +87,20 @@ function setAudioState(state) {
   sessionStorage.setItem('audioState', state);
 }
 
-export function initWindowListener() {
+export function initFirstGesture() {
+  const container = document.querySelector('.page');
   let handled = false;
 
   const onFirstGesture = async () => {
     if (handled) return;
+    if (e.target.classList.contains('start__input')) return;
     handled = true;
 
-    window.removeEventListener('pointerdown', onFirstGesture);
-    window.removeEventListener('touchstart', onFirstGesture);
-    window.removeEventListener('keydown', onFirstGesture);
-    window.removeEventListener('click', onFirstGesture);
-    window.removeEventListener('touchend', onFirstGesture);
+    container.removeEventListener('pointerdown', onFirstGesture);
+    container.removeEventListener('touchstart', onFirstGesture);
+    container.removeEventListener('keydown', onFirstGesture);
+    container.removeEventListener('click', onFirstGesture);
+    container.removeEventListener('touchend', onFirstGesture);
 
     if (getAudioState() === 'on') {
       await playSound();
@@ -107,11 +109,11 @@ export function initWindowListener() {
     }
   };
 
-  window.addEventListener('pointerdown', onFirstGesture, { passive: true });
-  window.addEventListener('touchstart', onFirstGesture, { passive: true });
-  window.addEventListener('keydown', onFirstGesture, { passive: true });
-  window.addEventListener('click', onFirstGesture);
-  window.addEventListener('touchend', onFirstGesture);
+  container.addEventListener('pointerdown', onFirstGesture, { passive: true });
+  container.addEventListener('touchstart', onFirstGesture, { passive: true });
+  container.addEventListener('keydown', onFirstGesture, { passive: true });
+  container.addEventListener('click', onFirstGesture, { passive: true });
+  container.addEventListener('touchend', onFirstGesture, { passive: true });
 }
 
 const onAudioIconClick = (e, fromBattePage = false) => {
