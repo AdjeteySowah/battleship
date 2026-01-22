@@ -71,3 +71,21 @@ export function hasShipSunk(x, y, board) {
 export function resetItemNum() {
   itemNum = 0;
 }
+
+export function showWelcomeAlert() {
+  if (localStorage.getItem('battleshipAlertShown')) return;
+
+  alert(
+    `Thanks for playing Battleship! 🚢
+
+    How to play:
+    • Place your ships on the board.
+    • Take turns attacking coordinates on the enemy grid.
+    • A hit damages a ship; a miss ends your turn.
+    • Sink all enemy ships to win the game.
+
+    Good luck, Commander!`,
+  );
+
+  localStorage.setItem('battleshipAlertShown', 'true');
+}
