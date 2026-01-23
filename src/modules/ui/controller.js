@@ -211,8 +211,6 @@ function initStartPage(container, navigateTo) {
   input.addEventListener('focus', playSound);
   btn.addEventListener('click', onStart);
 
-  input.focus();
-
   return function cleanup() {
     document.removeEventListener('keydown', onKey);
     input.removeEventListener('input', allowOnlyAlphanumeric);
