@@ -49,6 +49,8 @@ async function playSound(aHit) {
     page.classList.contains('page--placement') ||
     page.classList.contains('page--winner');
 
+  if (getAudioState() !== 'on') return;
+
   if (notBattlePage) {
     try {
       startAudio.loop = true;
@@ -59,17 +61,15 @@ async function playSound(aHit) {
       console.error('play failed:', err);
     }
   } else {
-    if (getAudioState() === 'on') {
-      try {
-        await shotAudio.play();
+    try {
+      await shotAudio.play();
 
-        await new Promise((res) => setTimeout(res, 1500));
+      await new Promise((res) => setTimeout(res, 1500));
 
-        const sfx = aHit ? hitAudio : missAudio;
-        await sfx.play();
-      } catch (err) {
-        console.error('play failed:', err);
-      }
+      const sfx = aHit ? hitAudio : missAudio;
+      await sfx.play();
+    } catch (err) {
+      console.error('play failed:', err);
     }
   }
 }
@@ -88,19 +88,17 @@ function setAudioState(state) {
 }
 
 export function initFirstGesture() {
-  const container = document.querySelector('.page');
   let handled = false;
 
-  const onFirstGesture = async (e) => {
+  const onFirstGesture = async () => {
     if (handled) return;
-    if (e.target.classList.contains('start__input')) return;
     handled = true;
 
-    container.removeEventListener('pointerdown', onFirstGesture);
-    container.removeEventListener('touchstart', onFirstGesture);
-    container.removeEventListener('keydown', onFirstGesture);
-    container.removeEventListener('click', onFirstGesture);
-    container.removeEventListener('touchend', onFirstGesture);
+    window.removeEventListener('pointerdown', onFirstGesture);
+    window.removeEventListener('touchstart', onFirstGesture);
+    window.removeEventListener('keydown', onFirstGesture);
+    window.removeEventListener('click', onFirstGesture);
+    window.removeEventListener('touchend', onFirstGesture);
 
     if (getAudioState() === 'on') {
       await playSound();
@@ -109,11 +107,11 @@ export function initFirstGesture() {
     }
   };
 
-  container.addEventListener('pointerdown', onFirstGesture, { passive: true });
-  container.addEventListener('touchstart', onFirstGesture, { passive: true });
-  container.addEventListener('keydown', onFirstGesture, { passive: true });
-  container.addEventListener('click', onFirstGesture, { passive: true });
-  container.addEventListener('touchend', onFirstGesture, { passive: true });
+  window.addEventListener('pointerdown', onFirstGesture, { passive: true });
+  window.addEventListener('touchstart', onFirstGesture, { passive: true });
+  window.addEventListener('keydown', onFirstGesture, { passive: true });
+  window.addEventListener('click', onFirstGesture);
+  window.addEventListener('touchend', onFirstGesture);
 }
 
 const onAudioIconClick = (e, fromBattePage = false) => {
@@ -210,6 +208,7 @@ function initStartPage(container, navigateTo) {
 
   document.addEventListener('keydown', onKey);
   input.addEventListener('input', allowOnlyAlphanumeric);
+  input.addEventListener('focus', playSound);
   btn.addEventListener('click', onStart);
 
   input.focus();
@@ -217,6 +216,7 @@ function initStartPage(container, navigateTo) {
   return function cleanup() {
     document.removeEventListener('keydown', onKey);
     input.removeEventListener('input', allowOnlyAlphanumeric);
+    input.removeEventListener('focus', playSound);
     btn.removeEventListener('click', onStart);
   };
 }
