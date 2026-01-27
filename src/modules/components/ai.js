@@ -13,6 +13,7 @@ let skipLeft = false;
 export function genRandomAttackCoord(shots, board) {
   let x = Math.floor(Math.random() * 10);
   let y = Math.floor(Math.random() * 10);
+  const randomCoord = [x, y];
 
   const valid = isValidAttack(x, y, shots);
 
@@ -38,13 +39,13 @@ export function genRandomAttackCoord(shots, board) {
                 x = a - 1; // gen upward
                 y = b;
                 if (!isValidAttack(x, y, shots)) {
-                  if (shots[x][y] === 'H') {
+                  if (shots[x]?.[y] === 'H') {
                     if (!directionSet) upward = true;
                   } else {
                     x = a + 1; // gen downward
                     y = b;
                     if (!isValidAttack(x, y, shots)) {
-                      if (shots[x][y] === 'H') {
+                      if (shots[x]?.[y] === 'H') {
                         if (!directionSet) downward = true;
                       }
                     }
@@ -57,40 +58,68 @@ export function genRandomAttackCoord(shots, board) {
 
         if (rightward || leftward || upward || downward) {
           if (rightward) {
-            while (!isValidAttack(x, y, shots)) {
+            while (!isValidAttack(x, y, shots) && y < 10) {
               y += 1;
             }
             if (board[x][y] === null) {
               rightward = false;
               hitTracker.push([x, y - 1]);
             }
+            if (board[x][y] === undefined) {
+              rightward = false;
+              leftward = true;
+              hitTracker.push([x, y - 1]);
+              y = b - 1;
+            }
           } else if (leftward) {
-            while (!isValidAttack(x, y, shots)) {
+            while (!isValidAttack(x, y, shots) && y >= 0) {
               y -= 1;
             }
             if (board[x][y] === null) {
               leftward = false;
               hitTracker.push([x, y + 1]);
             }
+            if (board[x][y] === undefined) {
+              leftward = false;
+              rightward = true;
+              hitTracker.push([x, y + 1]);
+              y = b + 1;
+            }
           } else if (upward) {
-            while (!isValidAttack(x, y, shots)) {
+            while (!isValidAttack(x, y, shots) && x >= 0) {
               x -= 1;
             }
-            if (board[x][y] === null) {
+            if (board[x]?.[y] === null) {
               upward = false;
               skipRight = true;
               skipLeft = true;
               hitTracker.push([x + 1, y]);
             }
+            if (board[x]?.[y] === undefined) {
+              upward = false;
+              downward = true;
+              skipRight = true;
+              skipLeft = true;
+              hitTracker.push([x + 1, y]);
+              x = a + 1;
+            }
           } else if (downward) {
-            while (!isValidAttack(x, y, shots)) {
+            while (!isValidAttack(x, y, shots) && x < 10) {
               x += 1;
             }
-            if (board[x][y] === null) {
+            if (board[x]?.[y] === null) {
               downward = false;
               skipRight = true;
               skipLeft = true;
               hitTracker.push([x - 1, y]);
+            }
+            if (board[x]?.[y] === undefined) {
+              downward = false;
+              upward = true;
+              skipRight = true;
+              skipLeft = true;
+              hitTracker.push([x - 1, y]);
+              x = a - 1;
             }
           }
         }
@@ -121,6 +150,10 @@ export function genRandomAttackCoord(shots, board) {
             if (!isValidAttack(x, y, shots)) {
               x = a + 1; // gen downward
               y = b;
+              if (!isValidAttack(x, y, shots)) {
+                x = randomCoord[0];
+                y = randomCoord[1];
+              }
             }
           }
         }
