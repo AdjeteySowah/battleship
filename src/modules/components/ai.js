@@ -158,6 +158,11 @@ export function genRandomAttackCoord(shots, board) {
           }
         }
       }
+      if (!isValidAttack(x, y, shots)) {
+        // a guard against the final generation of an invalid attack coord
+        x = randomCoord[0];
+        y = randomCoord[1];
+      }
       shot.pop();
     }
     shot.push([x, y]);
